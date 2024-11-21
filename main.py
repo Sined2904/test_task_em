@@ -11,7 +11,10 @@ class Book:
         self.status = status
 
     def __str__(self):
-        return f'ID: {self.id}, Название: "{self.title}", Автор: {self.author}, Год: {self.year}, Статус: {self.status}'
+        return (f'ID: {self.id}, Название: "{self.title}",
+                Автор: {self.author}, Год: {self.year},
+                Статус: {self.status}'
+                )
 
 
 def add_book(title: str, author: str, year: int) -> None:
@@ -28,7 +31,6 @@ def add_book(title: str, author: str, year: int) -> None:
     save_books(books)
     print(f'Книга "{title}" добавлена в библиотеку.')
 
-
 def delete_book(book_id: int) -> None:
     '''Удаление книги в базу.'''
 
@@ -39,8 +41,7 @@ def delete_book(book_id: int) -> None:
             save_books(books)
             print(f'Книга с ID {book_id} удалена из библиотеки.')
             return
-    print(f'Ошибка: Книга с ID {book_id} не найдена.')
-
+    print(f'Книга с ID {book_id} не найдена.')
 
 def search_books(find_request: str) -> tuple:
     '''Поиск книг по запросу.'''
@@ -48,19 +49,18 @@ def search_books(find_request: str) -> tuple:
     books = load_books()
     results = []
     for book in books:
-        if (find_request.lower() in book.title.lower() 
-            or find_request.lower() in book.author.lower() 
+        if (find_request.lower() in book.title.lower()
+            or find_request.lower() in book.author.lower()
             or find_request == str(book.year)):
             results.append(book)
     return results
-
 
 def change_status(book_id: int, new_status: str) -> None:
     '''Изменение статуса книги.'''
 
     books = load_books()
     if new_status not in ['в наличии', 'выдана', '1', '0']:
-        print("Ошибка: Некорректный статус. Доступные статусы: 'в наличии', 'выдана', '1', '0'.")
+        print("Некорректный статус. Доступные статусы: 'в наличии', 'выдана', '1', '0'.")
         return
     if new_status in ['в наличии', '1']:
         new_status = 'в наличии'
@@ -74,7 +74,6 @@ def change_status(book_id: int, new_status: str) -> None:
             return
     print(f'Книга с ID {book_id} не найдена.')
 
-
 def load_books() -> tuple:
     '''Загрузка всех книг в память.'''
 
@@ -86,24 +85,27 @@ def load_books() -> tuple:
                 books.append(Book(int(book_id), title, author, int(year), status))
     return books
 
-
 def save_books(books: tuple) -> None:
     '''Сохраниение всех книг из памяти в файл.'''
 
     with open(DATA_BASE, 'w', encoding='utf-8') as file:
         for book in books:
-            file.write(f'{book.id}|{book.title}|{book.author}|{book.year}|{book.status}\n')
-
+            file.write(f'{book.id}|{book.title}|
+                       {book.author}|{book.year}|{book.status}\n'
+                       )
 
 def main():
     '''Главное меню.'''
 
     while True:
         command_from_user = input(
-            '\n1. Добавить книгу (add),\n2. Удалить книгу (del),\n3. Поиск книги (find),'
-            '\n4. Показать все книги (ls),\n5. Изменить статус книги (ch)\nВыберите действие цифрой, командой или текстом: ')
-
-        if command_from_user in ['add', 'Add', 'ADd', 'ADD', 'Добавить книгу', 'добавить книгу', '1']:
+            '\n1. Добавить книгу (add),\n2. Удалить книгу (del),'
+            '\n3. Поиск книги (find),\n4. Показать все книги (ls),'
+            '\n5. Изменить статус книги (ch)'
+            '\nВыберите действие цифрой, командой или текстом: ')
+        if command_from_user in ['add', 'Add', 'ADd', 'ADD', 
+                                 'Добавить книгу','добавить книгу', '1'
+                                 ]:
             try:
                 title = input('Введите название книги: ')
                 author = input('Введите автора: ')
@@ -111,14 +113,14 @@ def main():
                 add_book(title, author, year)
             except ValueError:
                 print('Год издания должен состоять только из цифр')
-
-        if command_from_user in ['del', 'DEl', 'DEL', 'Удалить книгу', 'удалить книгу', '2']:
+        if command_from_user in ['del', 'DEl', 'DEL', 'Удалить книгу',
+                                 'удалить книгу', '2'
+                                 ]:
             try:
                 id = int(input('Укажите ID книги: '))
                 delete_book(id)
             except ValueError:
                 print('ID введен не корректно, попробуйте еще раз')
-
         if command_from_user in ['find', 'Find', 'FInd', 'FINd', 'FIND', 'Поиск книги', 'поиск книги', '3']:
             find_request = input("Введите название, автора или год для поиска: ")
             results = search_books(find_request)
@@ -128,15 +130,15 @@ def main():
                     print(book)
             else:
                 print("Книги не найдены.")
-
-        if command_from_user in ['ls', 'Ls', 'LS', 'Показать все книги', 'показать все книги', '4']:
+        if command_from_user in ['ls', 'Ls', 'LS', 'Показать все книги',
+                                 'показать все книги', '4'
+                                 ]:
             books = load_books()
             if books:
                 for book in books:
                     print(book)
             else:
                 print('Библиотека пуста')
-
         if command_from_user in ['ch', 'Ch', 'CH', 'Изменить статус книги', 'изменить статус книги', '5']:
             try:
                 book_id = int(input("Введите ID книги для изменения статуса: "))
