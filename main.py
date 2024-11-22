@@ -11,9 +11,9 @@ class Book:
         self.status = status
 
     def __str__(self):
-        return (f'ID: {self.id}, Название: "{self.title}",
-                Автор: {self.author}, Год: {self.year},
-                Статус: {self.status}'
+        return (f'ID: {self.id}, Название: "{self.title}",'
+                f'Автор: {self.author}, Год: {self.year},'
+                f'Статус: {self.status}'
                 )
 
 
@@ -21,7 +21,6 @@ def add_book(title: str, author: str, year: int) -> None:
     '''Добавление книги в базу.'''
 
     books = load_books()
-    print(books)
     if len(books) == 0:
         book_id = 1
     else:
@@ -90,8 +89,8 @@ def save_books(books: tuple) -> None:
 
     with open(DATA_BASE, 'w', encoding='utf-8') as file:
         for book in books:
-            file.write(f'{book.id}|{book.title}|
-                       {book.author}|{book.year}|{book.status}\n'
+            file.write(f'{book.id}|{book.title}|'
+                       f'{book.author}|{book.year}|{book.status}\n'
                        )
 
 def main():
